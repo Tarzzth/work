@@ -1,3 +1,4 @@
+warn("Hello")
 _G.W = true
 while _G.W do task.wait(0.1)
     local h = game.Players.LocalPlayer.Character.Humanoid
