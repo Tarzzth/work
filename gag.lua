@@ -32,19 +32,19 @@ local BASE = {} ; BASE.__index = BASE
 
 _G.Workspace = true
 
-_G.MutationDefault = _G.MutationDefault or {}
-_G.Pets = _G.Pets or {}
+_G.MutationDefault = _G.MutationDefault or {} -- Mutation ที่ต้องการเทรด
+_G.Pets = _G.Pets or {} -- สัตว์เลี้ยงที่ต้องการเทรด
 _G.Mutation = _G.Mutation or {}
 
-_G.Player = _G.Player or nil
-_G.CountTrade = _G.CountTrade or false
-_G.AutoTrade_Pets = _G.AutoTrade_Pets or false
-_G.AutoTrade_Fruit = _G.AutoTrade_Fruit or false
-_G.AntiFavorite_Trade = _G.AntiFavorite_Trade or false
-_G.SelectPets = _G.SelectPets or false
-_G.SelectMutation_Fruits = _G.SelectMutation_Fruits or false
-_G.Weight_Configs_fruit = _G.Weight_Configs_fruit or 0.1
-_G.Count = _G.Count or 100
+_G.Player = _G.Player or nil -- ผู้เล่น
+_G.CountTrade = _G.CountTrade or false -- เปิดใช้งานการนับจำนวนการเทรด
+_G.AutoTrade_Pets = _G.AutoTrade_Pets or false -- เทรดสัตว์เลี้ยง
+_G.AutoTrade_Fruit = _G.AutoTrade_Fruit or false -- เทรดผลไม้
+_G.AntiFavorite_Trade = _G.AntiFavorite_Trade or false -- ป้องกันเทรด item ที่ชอบ
+_G.SelectPets = _G.SelectPets or false -- เลือกสัตว์เลี้ยง
+_G.SelectMutation_Fruits = _G.SelectMutation_Fruits or false -- เปิดเลือกผลไม้ที่มี Mutation
+_G.Weight_Configs_fruit = _G.Weight_Configs_fruit or 0.1 -- น้ำหนักผลไม้
+_G.Count = _G.Count or 100 -- จำนวนการเทรดผลไม้
 
 
 _G.__countfruit_log = 0
@@ -59,8 +59,11 @@ function BASE:clicked(ui)
 end
 
 function BASE:Equip_ITEM(item)
+    if not item then return warn("Not Found Item") end
     local Backpack = LocalPlayer():FindFirstChild("Backpack")
     local Humanoid = LocalPlayer().Character and LocalPlayer().Character:FindFirstChildOfClass("Humanoid")
+
+    Humanoid:UnequipTools()
     if Backpack then
         local tool = Backpack:FindFirstChild(item)
         if not tool then 
@@ -145,7 +148,7 @@ function GET:Pets()
 
             table.insert(__Pets, item)
         end
-    end
+    end 
     return __Pets
 end
 
@@ -173,7 +176,6 @@ function Trade(item , player)
     local Humanoid = Humanoid(Character())
     local RootPart = RootPart(Character())
 
-    Humanoid:UnequipTools()
     if not item then return print("Not Found Item") end
 
     local target_player = Player():FindFirstChild(player)
@@ -202,7 +204,6 @@ function Trade_Fruit()
         local __item = nil
         local Humanoid = Humanoid(Character())
 
-        Humanoid:UnequipTools()
 
         for i, item in pairs(fruit) do task.wait(0.1)
 
@@ -221,7 +222,7 @@ function Trade_Fruit()
             local item_weight = item["Weight"]
             if item_weight and tonumber(item_weight.Value) >= _G.Weight_Configs_fruit then
                 if _G.SelectMutation_Fruits then
-                    for i, keyword in pairs(_G.Mutation) do
+                    for i, keyword in ipairs(_G.Mutation) do
                         if item:GetAttribute(tostring(keyword)) == true then
                             __item = item
                         end
@@ -252,7 +253,6 @@ function Trade_Pets()
         local __item = nil
         local Humanoid = Humanoid(Character())
 
-        Humanoid:UnequipTools()
 
         for i, item in pairs(Pets) do task.wait(0.1)
 
@@ -331,7 +331,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Grow a Graden : Trade item",
-    SubTitle = "by tarzzth",
+    SubTitle = "by ",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true, 
@@ -537,3 +537,72 @@ task.spawn(function()
 end)
 
 warn("-- Loaded Grow a Graden : Trade item --")
+
+task.spawn(function()
+    while _G.Workspace do task.wait(0.1)
+        local playerGui = PlayerGui()
+        local Gui = playerGui:FindFirstChild("ON/OFF")
+        if Gui then return end
+
+        if not Gui then
+            playerGui = LocalPlayer():WaitForChild("PlayerGui")
+        
+            -- GUI
+            local gui = Instance.new("ScreenGui")
+            gui.Name = "ON/OFF"
+            gui.ResetOnSpawn = false
+            gui.IgnoreGuiInset = false
+            gui.Parent = playerGui
+        
+            local button = Instance.new("TextButton")
+            button.Name = "ProButton"
+            button.AnchorPoint = Vector2.new(0, 0)
+            button.Position = UDim2.new(0, 20, 0, 20)
+            button.Size = UDim2.new(0, 180, 0, 55)
+            button.BackgroundColor3 = Color3.fromRGB(123, 31, 162)
+            button.Text = "Script by "
+            button.TextColor3 = Color3.new(1, 1, 1)
+            button.TextSize = 22
+            button.Font = Enum.Font.GothamMedium
+            button.AutoButtonColor = false
+            button.Parent = gui
+        
+            local corner = Instance.new("UICorner")
+            corner.CornerRadius = UDim.new(0, 14)
+            corner.Parent = button
+        
+            local gradient = Instance.new("UIGradient")
+            gradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(210, 92, 231)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(130, 61, 172)),
+            })
+            gradient.Rotation = 45
+            gradient.Parent = button
+        
+        
+            local stroke = Instance.new("UIStroke")
+            stroke.Color = Color3.fromRGB(186, 104, 200)
+            stroke.Thickness = 1.5
+            stroke.Transparency = 0.2
+            stroke.Parent = button
+        
+        
+            button.MouseEnter:Connect(function()
+                button:TweenSize(UDim2.new(0, 190, 0, 60), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.2, true)
+                stroke.Transparency = 0
+            end)
+        
+            button.MouseLeave:Connect(function()
+                button:TweenSize(UDim2.new(0, 180, 0, 55), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.2, true)
+                stroke.Transparency = 0.2
+            end)
+        
+        
+            button.MouseButton1Click:Connect(function()
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
+            end) 
+        end
+    end
+end)
+
