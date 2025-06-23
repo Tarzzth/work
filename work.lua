@@ -1,22 +1,22 @@
 
--- ใช้ hookfunction เพื่อจับฟังก์ชันที่โดนเรียก
-local mt = getrawmetatable(game)
-setreadonly(mt, false)
+-- -- ใช้ hookfunction เพื่อจับฟังก์ชันที่โดนเรียก
+-- local mt = getrawmetatable(game)
+-- setreadonly(mt, false)
 
-local oldNamecall = mt.__namecall
+-- local oldNamecall = mt.__namecall
 
-mt.__namecall = newcclosure(function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
+-- mt.__namecall = newcclosure(function(self, ...)
+--     local args = {...}
+--     local method = getnamecallmethod()
 
-    -- ตรวจจับถ้าเป็นการเตะผู้เล่น
-    if method == "Kick" and self == game.Players.LocalPlayer then
-        warn("ถูกพยายาม Kick: ", unpack(args))
-        return -- บล็อกไม่ให้เตะ
-    end
+--     -- ตรวจจับถ้าเป็นการเตะผู้เล่น
+--     if method == "Kick" and self == game.Players.LocalPlayer then
+--         warn("ถูกพยายาม Kick: ", unpack(args))
+--         return -- บล็อกไม่ให้เตะ
+--     end
 
-    return oldNamecall(self, unpack(args))
-end)
+--     return oldNamecall(self, unpack(args))
+-- end)
 
 
 local RunService = game:GetService("RunService")
