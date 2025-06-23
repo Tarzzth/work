@@ -195,7 +195,7 @@ function Trade_Fruit()
             return
         end
         local item_weight = item:FindFirstChild("Weight")
-        if tonumber(item_weight.Value) >= _G.Weight_Configs_fruit then
+        -- if tonumber(item_weight.Value) >= _G.Weight_Configs_fruit then
             if _G.SelectMutation_Fruits then
                 for i, keyword in pairs(_G.Mutation) do
                     if item:GetAttribute(tostring(keyword)) == true then
@@ -207,9 +207,9 @@ function Trade_Fruit()
 
                 __item = item
             end
-        else
-            return
-        end
+        -- else
+            -- return
+        -- end
 
         if __item then
             if _G.AntiFavorite_Trade then
