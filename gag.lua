@@ -192,7 +192,9 @@ function Trade(item , player)
         if promt then
             promt.Enabled = true
             promt.HoldDuration = 0
-            fireproximityprompt(promt , 0)
+            -- ส่วนที่มีปัญหา 
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
             warn("Trading item:", item, "to player:", player)
         end
     end
@@ -204,7 +206,7 @@ function Trade_Fruit()
         local __item = nil
         local Humanoid = Humanoid(Character())
 
-
+        
         for i, item in pairs(fruit) do task.wait(0.1)
 
             print("Trading item: ", item.Name)
