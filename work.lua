@@ -176,7 +176,8 @@ function Trade(item , player)
             task.wait(2)
             promt.Enabled = true
             promt.HoldDuration = 0
-            fireproximityprompt(promt , 0)
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
             print("Fire Proximity Prompt")
             warn("Trading item:", item, "to player:", player)
         end
