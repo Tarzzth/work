@@ -97,6 +97,10 @@ function GET:Fruit()
                 end
             end
 
+            if item:GetAttribute("b") ~= "j" then
+                continue
+            end
+
             table.insert(fruit, item)
         end
     end
@@ -174,7 +178,7 @@ end
 
 function Trade(item , player)
     local Humanoid = Humanoid(Character())
-    local RootPart = RootPart(Character())
+    local RootPart = RootPart(Character()) 
 
     if not item then return print("Not Found Item") end
 
