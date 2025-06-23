@@ -106,6 +106,7 @@ end
 function GET:Fruit()
     local fruit = {}
 
+    print("Hello Fruit")
     local Backpack = LocalPlayer():FindFirstChild("Backpack")
     for i, item in pairs(Backpack:GetChildren()) do
         if item:IsA("Tool") and item:GetAttribute("f") then
@@ -115,18 +116,18 @@ function GET:Fruit()
     return fruit
 end
 
-function GET:Pets()
-    local __Pets = {}
+-- function GET:Pets()
+--     local __Pets = {}
 
-    print("Hello Fruit")
-    local Backpack = LocalPlayer():FindFirstChild("Backpack")
-    for i, item in pairs(Backpack:GetChildren()) do
-        if item:IsA("Tool") and item:GetAttribute("ItemType") == "Pet" then
-            table.insert(__Pets, item)
-        end
-    end
-    return __Pets
-end
+    
+--     local Backpack = LocalPlayer():FindFirstChild("Backpack")
+--     for i, item in pairs(Backpack:GetChildren()) do
+--         if item:IsA("Tool") and item:GetAttribute("ItemType") == "Pet" then
+--             table.insert(__Pets, item)
+--         end
+--     end
+--     return __Pets
+-- end
 
 function Accept_Trade()
     local suss , err = pcall(function()
@@ -152,7 +153,7 @@ function Trade(item , player)
     local Humanoid = Humanoid(Character())
     local RootPart = RootPart(Character())
 
-    task.delay(2)
+    task.wait(2)
     Humanoid:UnequipTools()
     print("Unequip")
     if not item then return end
@@ -161,7 +162,7 @@ function Trade(item , player)
     if not target_player then return warn("Not Found Player : ".. player) end
     RootPart.CFrame = target_player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 2, 0)
  
-    task.delay(2)
+    task.wait(2)
     BASE:Equip_ITEM(item)
 
     warn("Equipped item:", item)
@@ -172,7 +173,7 @@ function Trade(item , player)
         if not promt then return end
 
         if promt then
-            task.delay(2)
+            task.wait(2)
             promt.Enabled = true
             promt.HoldDuration = 0
             fireproximityprompt(promt , 0)
@@ -186,7 +187,7 @@ function Trade_Fruit()
     local fruit = GET:Fruit()
     local __item = nil
 
-    task.delay(2)
+    task.wait(2)
     for i, item in pairs(fruit) do task.wait(0.1)
 
         if _G.CountTrade and _G.__countfruit_log >= _G.Count then
@@ -217,7 +218,7 @@ function Trade_Fruit()
                 end
             end
 
-            task.delay(2)
+            task.wait(2)
             print("trade")
             Trade(__item.Name, _G.Player)
             _G.__countfruit_log += 1
@@ -226,46 +227,46 @@ function Trade_Fruit()
     end
 end
 
-function Trade_Pets()
-    local Pets = GET:Pets()
-    local __item = nil
+-- function Trade_Pets()
+--     local Pets = GET:Pets()
+--     local __item = nil
 
-    for i, item in pairs(Pets) do task.wait(0.1)
+--     for i, item in pairs(Pets) do task.wait(0.1)
 
-        if _G.CountTrade and _G.__countfruit_log >= _G.Count then
-            warn("Trade limit reached for fruits.")
-            return
-        end
+--         if _G.CountTrade and _G.__countfruit_log >= _G.Count then
+--             warn("Trade limit reached for fruits.")
+--             return
+--         end
 
 
-        if _G.SelectPets then
-            for i, keyword in pairs(_G.Pets) do
-                if item.Name:lower():find(tostring(keyword:lower())) then
-                    __item = item
-                    break
-                end
-            end
-        else
-            __item = item
+--         if _G.SelectPets then
+--             for i, keyword in pairs(_G.Pets) do
+--                 if item.Name:lower():find(tostring(keyword:lower())) then
+--                     __item = item
+--                     break
+--                 end
+--             end
+--         else
+--             __item = item
 
-        end
-    end
+--         end
+--     end
 
-    if __item then
-        if _G.AntiFavorite_Trade then
-            if __item:GetAttribute("d") == true then
-                warn("Trading pets is not allowed for favorite items. : " , __item.Name)
-                return
-            else
-                warn("error favorite: " , __item.Name)
-            end
-        end
+--     if __item then
+--         if _G.AntiFavorite_Trade then
+--             if __item:GetAttribute("d") == true then
+--                 warn("Trading pets is not allowed for favorite items. : " , __item.Name)
+--                 return
+--             else
+--                 warn("error favorite: " , __item.Name)
+--             end
+--         end
 
-        Trade(__item.Name, _G.Player)
-        _G.__countfruit_log += 1
-        task.wait(0.1)
-    end
-end
+--         Trade(__item.Name, _G.Player)
+--         _G.__countfruit_log += 1
+--         task.wait(0.1)
+--     end
+-- end
 
 
 Trade_Fruit()
