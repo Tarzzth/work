@@ -276,7 +276,7 @@ function Trade_Pets()
 
             if _G.SelectPets then
                 for i, keyword in pairs(_G.Pets) do
-                    local keyword_str = tostring(keyword:lower())
+                    local keyword_str = tostring(keyword)
                     if item.Name:find(keyword_str) then
                         __item = item
                     end
