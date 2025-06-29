@@ -141,18 +141,6 @@ function GET:Pets()
         end
     end
 
-    local pet_item = LocalPlayer().Character
-    for i, item in pairs(pet_item:GetChildren()) do
-        if item:IsA("Tool") and item:GetAttribute("ItemType") == "Pet" then
-            if _G.AntiFavorite_Trade then
-                if item:GetAttribute("d") == true then
-                    continue
-                end
-            end
-
-            table.insert(__Pets, item)
-        end
-    end 
     return __Pets
 end
 
@@ -273,20 +261,20 @@ function Trade_Pets()
                 return
             end
 
-
-            if _G.SelectPets then
-                for i, keyword in pairs(_G.Pets) do
-                    local keyword_str = tostring(keyword)
-                    if item.Name:find(keyword_str) then
-                        __item = item
+            for i, keyword in pairs(_G.Pets) do
+                __item = nil
+                if _G.SelectPets then
+                    local Handle = item:FindFirstChild("Handle")
+                    for i, v in pairs(Handle:GetChildren()) do
+                        if v:IsA("Model") and v.Name == keyword or v:GetAttribute("CurrentSkin") == keyword then
+                            __item = item
+                        end
                     end
-                end
-            else
-                __item = item
-                
+                    
+                elseif not _G.SelectPets then
+                    __item = item
+                end 
             end
-        
-        
         end
 
         if __item then
@@ -299,8 +287,16 @@ function Trade_Pets()
                 end
             end
 
-            Trade(__item.Name, _G.Player)
+            BASE:Equip_ITEM(__item.Name)
+            local args = {
+                "GivePet",
+                game:GetService("Players"):WaitForChild(_G.Player)
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("PetGiftingService"):FireServer(unpack(args))
+            
             _G.__countfruit_log += 1
+
+            table.remove(Pets, i)
             task.wait(0.1)
         end
     end)
@@ -482,7 +478,7 @@ local PetsDropDown = section.setting:AddDropdown("Dropdown", {
     Title = "Select Pets",
     Values = _G.__PetsList or {},
     Multi = true,
-    Default = _G.Pets,
+    Default = _G.Pets or {},
 })
 
 PetsDropDown:OnChanged(function(Value)
@@ -612,3 +608,12 @@ task.spawn(function()
     end
 end)
 
+-- for index, value in pairs(_G.Pets) do
+--     print(index , value)
+-- end
+
+-- local args = {
+-- 	"GivePet",
+-- 	game:GetService("Players"):WaitForChild("teiwesdinhquoc83")
+-- }
+-- game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("PetGiftingService"):FireServer(unpack(args))
